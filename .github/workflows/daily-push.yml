@@ -1,0 +1,25 @@
+name: Daily News Push
+
+on:
+  schedule:
+    # 每天早上8点运行 (UTC时间0点，北京时间+8)
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Run push script
+      env:
+        SENDKEY: ${{ secrets.SENDKEY }}
+      run: |
+        python daily_news.py
